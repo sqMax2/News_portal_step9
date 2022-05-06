@@ -1,0 +1,44 @@
+from newsapp.models import *
+user1 = User.objects.create_user('Adam')
+user2 = User.objects.create_user('Eve')
+author1 = Author.objects.create(authorUser=user1)
+author2 = Author.objects.create(authorUser=user2)
+Category.objects.create(name='Sport')
+Category.objects.create(name='Tech')
+Category.objects.create(name='Science')
+Category.objects.create(name='Culture')
+Category.objects.create(name='Computers')
+Post.objects.create(author=author1, categoryType='NW', title='New exhibition', text='New exhibition opens at local museum on 05/16/22.')
+Post.objects.get(id=1).postCategory.add(Category.objects.get(id=4))
+Post.objects.create(author=author2, categoryType='AR', title='Software development trends', text='The main software development trends today include the increased adoption of AI and ML software solutions, cloud-native development with Kubernetes, low-code/no-code (LCNC) development, and a focus on quality, cybersecurity and automation.')
+Post.objects.get(id=2).postCategory.add(Category.objects.get(id=2))
+Post.objects.create(author=author1, categoryType='AR', title='Sports in the future', text='Like any human endeavor, sports evolve over time. Science and technology fuel these changes, providing ever-better gear made with superior materials, better information about nutrition and training, and improvements in data generation and analysis that help push the limits of athletic capability.')
+Post.objects.get(id=3).postCategory.add(Category.objects.get(id=1))
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=user2, text='Another boring exhibition? Ehhh')
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=user1, text='You definitely should see it')
+Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=user1, text='Cloud development? Intriguing')
+Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=user2, text='I bet on human augmentation')
+Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=user1, text='''That'l be fun''')
+Comment.objects.get(id=2).like()
+Comment.objects.get(id=3).like()
+Comment.objects.get(id=4).like()
+Post.objects.get(id=1).like()
+Post.objects.get(id=1).dislike()
+Post.objects.get(id=2).like()
+Post.objects.get(id=3).like()
+Post.objects.get(id=3).like()
+Author.objects.get(id=1).update_rating()
+Author.objects.get(id=2).update_rating()
+Author.objects.order_by('-ratingAuthor')[:1][0].authorUser.username
+bestPost = Post.objects.order_by('-rating')[:1][0]
+bestPost.dateCreation
+bestPost.author.authorUser.username
+bestPost.rating
+bestPost.title
+bestPost.preview()
+bestPostComments = Comment.objects.filter(commentPost=bestPost)
+for i in bestPostComments:
+    i.dateCreation
+    i.commentUser.username
+    i.rating
+    i.text
