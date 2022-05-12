@@ -1,0 +1,36 @@
+{% extends 'flatpages/default.html' %}
+
+<!-- adding custom filters usage -->
+{% load custom_filters %}
+<!-- adding custom tags usage -->
+{% load custom_tags %}
+
+<!-- page title -->
+{% block title %}
+News
+{% endblock title %}
+
+<!-- News list -->
+{% block content %}
+<h1>All News ({{ news_list|length }})</h1>
+<!--<h5>Today {{ time_now|date:'d.m.Y' }}</h5>-->
+<h5>Today {% current_time '%d.%m.%Y' %}</h5>
+{% if news_list %}
+    <table>
+        <tr>
+            {% for news in news_list %}
+            <td width="200rem">
+                <a href="/news/{{ news.pk }}">
+                    <b>{{ news.title|censor }}</b><br/>
+                    <span style="font-size:0.8rem">{{ news.dateCreation|date:'d.m.Y' }}</span>><br/>
+                    {{ news.text|truncatechars:20|censor }}
+                </a>
+            </td>
+            {% endfor %}
+        </tr>
+    </table>
+
+{% else %}
+    <h2>No news available</h2>
+{% endif %}
+{% endblock content %}

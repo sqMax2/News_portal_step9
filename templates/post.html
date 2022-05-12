@@ -1,0 +1,18 @@
+{% extends 'flatpages/default.html' %}
+
+<!-- adding custom filters usage -->
+{% load custom_filters %}
+
+<!-- page title -->
+{% block title %}
+{{ post.title }}
+{% endblock title %}
+
+<!-- News list -->
+{% block content %}
+<h1>{{ post.title|censor }}</h1>
+<span style="font-size:0.8rem">{{ post.dateCreation|date:'d.m.Y' }}</span><br/>
+{{ post.text|censor }}
+<br/><br/>
+<a href="/news/">Back</a>
+{% endblock content %}

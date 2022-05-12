@@ -20,10 +20,16 @@ class Author(models.Model):
         self.ratingAuthor = post_temp_rating * 3 + comment_temp_rating
         self.save()
 
+    def __str__(self):
+        return f'User {self.authorUser.username}'
+
 
 # Category and tags
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
+
+    def __str__(self):
+        return self.name
 
 
 # Post and article
@@ -45,7 +51,7 @@ class Post(models.Model):
     # Preview string template
     template_string = '$text...'
 
-    # Rating modifiers
+        # Rating modifiers
     def like(self):
         self.rating += 1
         self.save()
@@ -57,6 +63,9 @@ class Post(models.Model):
     # Post preview (using string templates)
     def preview(self):
         return Template(self.template_string).substitute(text=self.text[0:123])
+
+    def __str__(self):
+        return f'{self.title} {self.dateCreation}: {self.text[:20]}...'
 
 
 # ManyToMany model
@@ -81,3 +90,6 @@ class Comment(models.Model):
     def dislike(self):
         self.rating -= 1
         self.save()
+
+    def __str__(self):
+        return f'{self.commentPost.title}: {self.commentUser.username}: {self.text[:20]}... {self.dateCreation}'
