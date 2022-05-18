@@ -13,6 +13,8 @@
 <h1>{{ post.title|censor }}</h1>
 <span style="font-size:0.8rem">{{ post.dateCreation|date:'d.m.Y' }}</span><br/>
 {{ post.text|censor }}
+<br/>
+<a href="{{ post.pk }}/edit/">Edit</a> <a href="{{ post.pk }}/delete/">Delete</a>
 <br/><br/>
-<a href="/news/">Back</a>
+<a href="./">Back</a>
 {% endblock content %}

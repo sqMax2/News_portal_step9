@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.urls import reverse
 from string import Template
 
 
@@ -59,6 +60,10 @@ class Post(models.Model):
     def dislike(self):
         self.rating -= 1
         self.save()
+
+    #
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])
 
     # Post preview (using string templates)
     def preview(self):

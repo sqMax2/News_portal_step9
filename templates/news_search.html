@@ -12,7 +12,7 @@ News
 
 <!-- News list -->
 {% block content %}
-<h1>All ({{ page_obj.paginator.count }})</h1>
+<h1>Searc Results ({{ page_obj.paginator.count }})</h1>
 <!--<h5>Today {{ time_now|date:'d.m.Y' }}</h5>-->
 <h5>Today {% current_time '%d.%m.%Y' %}</h5>
 <!--{% if news_list %}-->
@@ -33,22 +33,21 @@ News
 <!--    <h2>No news available</h2>-->
 <!--{% endif %}-->
 
-<!--   &lt;!&ndash; request form &ndash;&gt;-->
-<!--   <form action="" method="get">-->
-<!--       &lt;!&ndash; generating form &ndash;&gt;-->
-<!--       {{ filterset.form.as_p }}-->
-<!--       &lt;!&ndash; form submit button &ndash;&gt;-->
-<!--       <input type="submit" value="Search" />-->
-<!--   </form>-->
-<a href="search">Search</a> <a href="create">Create</a>
-
+   <!-- request form -->
+   <form action="" method="get">
+       <!-- generating form -->
+       {{ filterset.form.as_p }}
+       <!-- form submit button -->
+       <input type="submit" value="Search" />
+   </form>
+<a href="..">Back to All</a>
    <hr>
 {% if news_list %}
     <table>
         <tr>
             {% for news in news_list %}
             <td width="200rem">
-                <a href="{{ news.pk }}">
+                <a href="../{{ news.pk }}">
                     <b>{{ news.title|censor }}</b><br/>
                     <span style="font-size:0.8rem">{{ news.dateCreation|date:'d.m.Y' }}</span>><br/>
                     {{ news.text|truncatechars:20|censor }}
