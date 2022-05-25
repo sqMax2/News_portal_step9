@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-qz32d-l)w7azutx#-@9u@7k09q6938bw5x&_7r!gucf))+2w+^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# adding host
 ALLOWED_HOSTS = []
 
 
@@ -44,6 +45,15 @@ INSTALLED_APPS = [
     'newsapp',
     'fpages',
     'django_filters',
+    # allauth required apps
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # ... include the providers you want to enable:
+    'allauth.socialaccount.providers.google',
+    # custom authentication app
+    'authapp',
+    'protect',
 ]
 
 # site id
@@ -66,7 +76,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        # adding templates path
+        # adding templates path. Possible text: "'DIRS': [BASE_DIR/'templates'],"
         'DIRS': [os.path.join(BASE_DIR, 'templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -138,3 +148,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
+
+# Adding login consts
+# LOGIN_URL = 'sign/login/'
+LOGIN_REDIRECT_URL = '/'
+# allauth login url
+LOGIN_URL = '/accounts/login/'
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+# allauth consts
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_FORMS = {'signup': 'authapp.models.BasicSignupForm'}
