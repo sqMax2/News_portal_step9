@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 # from django.views.generic import TemplateView
 # from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.shortcuts import redirect
 
 
 class NewsList(ListView):
@@ -68,11 +69,17 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
         current_url = self.request.path
         post = form.save(commit=False)
         # different categories for news and articles posts
+
         if current_url.split('/')[1] == 'news':
             post.categoryType = self.model.NEWS
         else:
             post.categoryType = self.model.ARTICLE
-        return super().form_valid(form)
+
+        self.object = form.save()
+        # urlObj = super().form_valid(form)
+        redirectURL = '/' + current_url.split('/')[1] + '/' + str(self.object.id)
+        # breakpoint()
+        return redirect(redirectURL)
 
 
 class NewsEdit(PermissionRequiredMixin, UpdateView):
@@ -84,11 +91,36 @@ class NewsEdit(PermissionRequiredMixin, UpdateView):
     template_name = 'post_edit.html'
     permission_required = ('newsapp.change_post',)
 
+    def post(self, request, *args, **kwargs):
+        current_url = self.request.path
+        redirectURL = ''
+        for i in current_url.split('/'):
+           if i == 'edit':
+               redirectURL = redirectURL[:-1]
+               break
+           redirectURL += i+'/'
+        super().post(request, *args, **kwargs)
+        return redirect(redirectURL)
+
 
 class NewsDelete(DeleteView):
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('news_list')
+
+    def post(self, request, *args, **kwargs):
+        current_url = self.request.path
+        redirectURL = ''
+        tempURL = ''
+        for i in current_url.split('/'):
+           if i == 'delete':
+               redirectURL = tempURL[:-1]
+               break
+           else:
+               tempURL = redirectURL
+           redirectURL += i+'/'
+        super().post(request, *args, **kwargs)
+        return redirect(redirectURL)
 
 # Authentication class examples
 # class ProtectedView(TemplateView):
