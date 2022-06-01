@@ -11,6 +11,10 @@ from django.contrib.auth.models import User
 # from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect
+# mailing
+from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 
 class NewsList(ListView):
@@ -76,9 +80,37 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
             post.categoryType = self.model.ARTICLE
 
         self.object = form.save()
-        # urlObj = super().form_valid(form)
         redirectURL = '/' + current_url.split('/')[1] + '/' + str(self.object.id)
-        # breakpoint()
+
+        # mailing through html rendering
+        html_content = render_to_string(
+            'post_created_mail.html',
+            {
+                'post': post,
+                'redirectURL': redirectURL,
+            }
+        )
+        # mailing list
+        mailing_list = list(set(post.postCategory.all().values_list('subscribers__email', flat=True)))
+        mailing_list.remove('')
+        if len(mailing_list):
+            msg = EmailMultiAlternatives(
+                subject=f'{self.object.author.authorUser.username}: {self.object.title} '
+                        f'{self.object.dateCreation.strftime("%d.%m.%Y")}',
+                body=post.text,
+                from_email='sqmax@yandex.ru',
+                to=mailing_list
+            )
+            msg.attach_alternative(html_content, 'text/html')
+            msg.send()
+
+        # straight way
+        # send_mail(
+        #     subject=f'{self.object.author.authorUser.username}: {self.object.title} {self.object.dateCreation.strftime("%d.%m.%Y")}',
+        #     message=self.object.text,
+        #     from_email='sqmax@yandex.ru',
+        #     recipient_list=['msvp@mail.ru']
+        # )
         return redirect(redirectURL)
 
 

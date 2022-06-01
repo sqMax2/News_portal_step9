@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>{{ post.author.authorUser.username }}: {{ post.title }} {{ post.dateCreation|date:"d.m.Y" }}</h2>
+    <p> Hello, {{ user.username }}. New post at your favourite category:
+        <a href="http://127.0.0.1:8000{{ redirectURL }}">{{ post.text|truncatechars:50 }} </p>
+</body>
+</html>

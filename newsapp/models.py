@@ -28,9 +28,16 @@ class Author(models.Model):
 # Category and tags
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
+    # related_name creates field in User model
+    subscribers = models.ManyToManyField(User, through='CategorySubscribers', related_name='categories', related_query_name='category')
 
     def __str__(self):
         return self.name
+
+
+class CategorySubscribers(models.Model):
+    userThrough = models.ForeignKey(User, on_delete=models.CASCADE)
+    categoryThrough = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 
 # Post and article
