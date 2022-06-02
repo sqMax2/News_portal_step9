@@ -1,7 +1,7 @@
 # from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
-from .models import Author, Category, Post, Comment
+from .models import Author, Category, Post, Comment, PostCategory
 from .filters import PostFilter
 from .forms import PostForm, ProfileForm
 from django.contrib.auth.models import User
@@ -12,9 +12,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import redirect
 # mailing
-from django.core.mail import send_mail
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
+# from django.core.mail import send_mail
+# from django.core.mail import EmailMultiAlternatives
+# from django.template.loader import render_to_string
+# from project.settings import DEFAULT_FROM_EMAIL
 
 
 class NewsList(ListView):
@@ -83,32 +84,32 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
         redirectURL = '/' + current_url.split('/')[1] + '/' + str(self.object.id)
 
         # mailing through html rendering
-        html_content = render_to_string(
-            'post_created_mail.html',
-            {
-                'post': post,
-                'redirectURL': redirectURL,
-            }
-        )
-        # mailing list
-        mailing_list = list(set(post.postCategory.all().values_list('subscribers__email', flat=True)))
-        mailing_list.remove('')
-        if len(mailing_list):
-            msg = EmailMultiAlternatives(
-                subject=f'{self.object.author.authorUser.username}: {self.object.title} '
-                        f'{self.object.dateCreation.strftime("%d.%m.%Y")}',
-                body=post.text,
-                from_email='sqmax@yandex.ru',
-                to=mailing_list
-            )
-            msg.attach_alternative(html_content, 'text/html')
-            msg.send()
+        # html_content = render_to_string(
+        #     'post_created_mail.html',
+        #     {
+        #         'post': post,
+        #         'redirectURL': redirectURL,
+        #     }
+        # )
+        # # mailing list
+        # mailing_list = list(set(post.postCategory.all().values_list('subscribers__email', flat=True)))
+        # mailing_list.remove('')
+        # if len(mailing_list):
+        #     msg = EmailMultiAlternatives(
+        #         subject=f'{self.object.author.authorUser.username}: {self.object.title} '
+        #                 f'{self.object.dateCreation.strftime("%d.%m.%Y")}',
+        #         body=post.text,
+        #         from_email='sqmax@yandex.ru',
+        #         to=mailing_list
+        #     )
+        #     msg.attach_alternative(html_content, 'text/html')
+        #     msg.send()
 
-        # straight way
+        # straight way mailing
         # send_mail(
         #     subject=f'{self.object.author.authorUser.username}: {self.object.title} {self.object.dateCreation.strftime("%d.%m.%Y")}',
         #     message=self.object.text,
-        #     from_email='sqmax@yandex.ru',
+        #     from_email=DEFAULT_FROM_EMAIL,
         #     recipient_list=['msvp@mail.ru']
         # )
         return redirect(redirectURL)
@@ -127,10 +128,10 @@ class NewsEdit(PermissionRequiredMixin, UpdateView):
         current_url = self.request.path
         redirectURL = ''
         for i in current_url.split('/'):
-           if i == 'edit':
-               redirectURL = redirectURL[:-1]
-               break
-           redirectURL += i+'/'
+            if i == 'edit':
+                redirectURL = redirectURL[:-1]
+                break
+            redirectURL += i+'/'
         super().post(request, *args, **kwargs)
         return redirect(redirectURL)
 
@@ -145,12 +146,12 @@ class NewsDelete(DeleteView):
         redirectURL = ''
         tempURL = ''
         for i in current_url.split('/'):
-           if i == 'delete':
-               redirectURL = tempURL[:-1]
-               break
-           else:
-               tempURL = redirectURL
-           redirectURL += i+'/'
+            if i == 'delete':
+                redirectURL = tempURL[:-1]
+                break
+            else:
+                tempURL = redirectURL
+            redirectURL += i+'/'
         super().post(request, *args, **kwargs)
         return redirect(redirectURL)
 

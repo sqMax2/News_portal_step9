@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     # additional apps
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'newsapp',
+    'newsapp.apps.NewsappConfig',
     'fpages',
     'django_filters',
     # allauth required apps
@@ -55,6 +55,9 @@ INSTALLED_APPS = [
     # custom authentication app
     'authapp',
     'protect',
+    # scheduler
+    'django_apscheduler',
+
 ]
 
 # site id
@@ -167,13 +170,18 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_FORMS = {'signup': 'authapp.models.BasicSignupForm'}
 # email consts
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
+EMAIL_USE_SSL = True
 #personal data stored in .env
 load_dotenv(dotenv_path='.env/yandex.env')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+
+# scheduler consts
+APSCHEDULER_DATETIME_FORMAT = "d.m.Y, G:i:s"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
