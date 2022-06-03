@@ -151,7 +151,7 @@ class NewsDelete(DeleteView):
                 break
             else:
                 tempURL = redirectURL
-            redirectURL += i+'/'
+            redirectURL += i + '/'
         super().post(request, *args, **kwargs)
         return redirect(redirectURL)
 
