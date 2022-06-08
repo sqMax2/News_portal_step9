@@ -1,10 +1,12 @@
 # from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from .models import Author, Category, Post, Comment, PostCategory
 from .filters import PostFilter
 from .forms import PostForm, ProfileForm
 from django.contrib.auth.models import User
+from django.http import HttpResponse
 # Authentication imports
 # from django.utils.decorators import method_decorator
 # from django.views.generic import TemplateView
@@ -16,6 +18,8 @@ from django.shortcuts import redirect
 # from django.core.mail import EmailMultiAlternatives
 # from django.template.loader import render_to_string
 # from project.settings import DEFAULT_FROM_EMAIL
+# Celery
+from .tasks import hello, printer
 
 
 class NewsList(ListView):
@@ -180,3 +184,10 @@ class ProfileEdit(LoginRequiredMixin, UpdateView):
     model = User
     # template
     template_name = 'profile_edit.html'
+
+
+class CeleryView(View):
+    def get(self, request):
+        # printer.delay(10)
+        hello.delay()
+        return HttpResponse('Hello!')

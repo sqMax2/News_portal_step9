@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from newsapp.views import CeleryView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', include('django.contrib.flatpages.urls')),
@@ -24,4 +26,5 @@ urlpatterns = [
     path('news/', include('newsapp.urls')),
     path('articles/', include('newsapp.urls')),
     path('accounts/', include('allauth.urls')),
+    path('celery/', CeleryView.as_view(), name='celery'),
 ]
