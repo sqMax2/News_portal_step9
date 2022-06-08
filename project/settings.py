@@ -185,3 +185,10 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 # scheduler consts
 APSCHEDULER_DATETIME_FORMAT = "d.m.Y, G:i:s"
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
+
+# Celery Redis broker config
+CELERY_BROKER_URL = 'redis://redis-16314.c302.asia-northeast1-1.gce.cloud.redislabs.com:16314'
+CELERY_RESULT_BACKEND = 'redis://redis-16314.c302.asia-northeast1-1.gce.cloud.redislabs.com:16314'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
