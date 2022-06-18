@@ -18,6 +18,7 @@ from django.urls import path, include
 
 from newsapp.views import CeleryView
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('', include('django.contrib.flatpages.urls')),

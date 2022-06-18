@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.urls import reverse
 from string import Template
+# cache
+from django.core.cache import cache
 
 
 # Author model
@@ -78,6 +80,12 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.title} {self.dateCreation}: {self.text[:20]}...'
+
+    # cache cleaning
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # removes cache
+        cache.delete(f'post-{self.pk}')
 
 
 # ManyToMany model

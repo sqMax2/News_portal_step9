@@ -20,6 +20,8 @@ from django.shortcuts import redirect
 # from project.settings import DEFAULT_FROM_EMAIL
 # Celery
 from .tasks import hello, printer
+# caching
+from django.core.cache import cache
 
 
 class NewsList(ListView):
@@ -63,6 +65,16 @@ class PostDetail(DetailView):
     template_name = 'post.html'
     # object name
     context_object_name = 'post'
+    queryset = Post.objects.all()
+
+    # cache
+    def get_object(self, *args, **kwargs):
+        obj = cache.get(f'post-{self.kwargs["pk"]}',
+                        None)
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'post-{self.kwargs["pk"]}', obj)
+        return obj
 
 
 class NewsCreate(PermissionRequiredMixin, CreateView):
