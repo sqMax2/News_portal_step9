@@ -207,3 +207,10 @@ CACHES = {
         'LOCATION': os.path.join(BASE_DIR, 'cache_files'),
     }
 }
+# Security config
+#SECURE_PROXY_SSL_HEADER = True
+#SECURE_SSL_REDIRECT = True
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
+# ALLOWED_HOSTS
+SECURE_HSTS_SECONDS = 300
