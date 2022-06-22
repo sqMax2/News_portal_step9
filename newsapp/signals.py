@@ -19,7 +19,7 @@ def on_transaction_commit(func):
 # @on_transaction_commit
 def notify_subscribers(sender, instance, action, **kwargs):
     # print(instance)
-    if action == 'post_add':
+    if action == 'post_add' and instance is Post:
         categoryType = dict(instance.CATEGORY_CHOICES)[instance.categoryType]
         redirectURL = f'/{categoryType.lower()}{"s" if categoryType[-1]!="s" else ""}/{instance.id}'
         html_content = render_to_string(
@@ -46,4 +46,3 @@ def notify_subscribers(sender, instance, action, **kwargs):
             msg.attach_alternative(html_content, 'text/html')
             msg.send()
 
-# post_save.connect(notify_subscribers, sender=Post)

@@ -109,7 +109,8 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
         # )
         # # mailing list
         # mailing_list = list(set(post.postCategory.all().values_list('subscribers__email', flat=True)))
-        # mailing_list.remove('')
+        # if mailing_list.count(''):
+        #   mailing_list.remove('')
         # if len(mailing_list):
         #     msg = EmailMultiAlternatives(
         #         subject=f'{self.object.author.authorUser.username}: {self.object.title} '

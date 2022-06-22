@@ -54,14 +54,14 @@ class Post(models.Model):
     )
     categoryType = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=ARTICLE)
     dateCreation = models.DateTimeField(auto_now_add=True)
-    postCategory = models.ManyToManyField(Category, through='PostCategory')
+    postCategory = models.ManyToManyField(Category, through='PostCategory', related_name='posts')
     title = models.CharField(max_length=128)
     text = models.TextField()
     rating = models.SmallIntegerField(default=0)
     # Preview string template
     template_string = '$text...'
 
-        # Rating modifiers
+    # Rating modifiers
     def like(self):
         self.rating += 1
         self.save()
@@ -70,7 +70,15 @@ class Post(models.Model):
         self.rating -= 1
         self.save()
 
-    #
+    @property
+    def no_category(self):
+        return not self.postCategory.all().exists()
+
+    @property
+    def category_list(self):
+        return [cat.name for cat in self.postCategory.all()]
+
+    # returns post URL
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
 
