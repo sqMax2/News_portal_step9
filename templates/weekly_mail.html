@@ -11,13 +11,14 @@
 </head>
 <body>
     <h2>{{ subject }}</h2>
-    <p> Hello, {{ user.username }}. New posts at your favourite categories:
+    <p> Hello, {{ user.username }}. New posts at your favourite categories:</p>
         {% if news_list %}
+
             <table>
                 <tr>
                     {% for news in news_list %}
                     <td width="200rem">
-                        <a href="http://127.0.0.1:8000/news/{{ news.pk }}">
+                        <a href="http://127.0.0.1:8000{{ news.get_absolute_url }}">
                             <b>{{ news.title|censor }}</b><br/>
                             <span style="font-size:0.8rem">{{ news.dateCreation|date:'d.m.Y' }}</span>><br/>
                             {{ news.text|truncatechars:20|censor }}

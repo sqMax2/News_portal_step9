@@ -4,8 +4,9 @@ from .views import NewsList, PostDetail, NewsSearch, NewsCreate, NewsEdit, NewsD
 from django.views.decorators.cache import cache_page
 
 
+app_name = 'newsapp'
 urlpatterns = [
-    path('', cache_page(60)(NewsList.as_view()), name='news_list'),
+    path('', cache_page(30)(NewsList.as_view()), name='news_list'),
     # with cache
     # path('<int:pk>', cache_page(60*5)(PostDetail.as_view()), name='post_detail'),
     path('<int:pk>', PostDetail.as_view(), name='post_detail'),

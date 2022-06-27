@@ -32,14 +32,15 @@ def my_job():
             qs = Post.objects.filter(dateCreation__gt=weekEarlier).filter(postCategory__in=u.categories.all())
             subject = f'Your weekly news:{", ".join(categoryList)} since {weekEarlier.strftime("%d.%m.%Y")}'
             body = f'News are: {". ".join(list(qs.values_list("title", flat=True)))}'
-            # categoryType = dict(qs.CATEGORY_CHOICES)[qs.categoryType]
+            categoryType = dict(qs.CATEGORY_CHOICES)[qs.categoryType]
             # redirectURL = f'/{categoryType.lower()}{"s" if categoryType[-1] != "s" else ""}/{qs.id}'
             html_content = render_to_string(
                 'weekly_mail.html',
                 {
                     'news_list': qs,
                     'user': u,
-                    'subject': subject
+                    'subject': subject,
+                    # 'redirectURL': redirectURL,
                 }
             )
             # mailing list

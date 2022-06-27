@@ -20,7 +20,7 @@ class CategoryInline(admin.TabularInline):
 
 
 class CategoryAdmin(ModelAdmin):
-    # list_display = ['name', ]
+    list_display = ['name', 'subscribers_count', 'post_count', ]
     # filter_vertical = ['subscribers', ]
     inlines = [CategoryInline]
 
@@ -48,7 +48,15 @@ class PostAdmin(ModelAdmin):
         return obj.author.authorUser.email
 
 
-admin.site.register(Author)
+class AuthorAdmin(ModelAdmin):
+    list_display = ['authorUser', 'email', 'id', 'ratingAuthor', ]
+
+
+class CommentAdmin(ModelAdmin):
+    list_display = ['__str__', 'commentUser', 'rating', 'commentPost', ]
+
+
+admin.site.register(Author, AuthorAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Post, PostAdmin)
-admin.site.register(Comment)
+admin.site.register(Comment, CommentAdmin)

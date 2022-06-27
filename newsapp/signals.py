@@ -19,7 +19,8 @@ def on_transaction_commit(func):
 # @on_transaction_commit
 def notify_subscribers(sender, instance, action, **kwargs):
     # print(instance)
-    if action == 'post_add' and instance is Post:
+    # print(f'created calls. Action is: {action}. Instance is a Post: {isinstance(instance, Post)}')
+    if action == 'post_add' and isinstance(instance, Post):
         categoryType = dict(instance.CATEGORY_CHOICES)[instance.categoryType]
         redirectURL = f'/{categoryType.lower()}{"s" if categoryType[-1]!="s" else ""}/{instance.id}'
         html_content = render_to_string(
@@ -27,14 +28,15 @@ def notify_subscribers(sender, instance, action, **kwargs):
             {
                 'post': instance,
                 'redirectURL': redirectURL,
+
             }
         )
+        # print(html_content)
         # mailing list
         mailing_list = list(set(instance.postCategory.all().values_list('subscribers__email', flat=True)))
         if '' in mailing_list:
             mailing_list.remove('')
-        # print(action)
-        # print(instance.postCategory)
+        # print(mailing_list)
         if len(mailing_list):
             msg = EmailMultiAlternatives(
                 subject=f'{instance.author.authorUser.username}: {instance.title} '
@@ -45,4 +47,4 @@ def notify_subscribers(sender, instance, action, **kwargs):
             )
             msg.attach_alternative(html_content, 'text/html')
             msg.send()
-
+            # print('Notification sent')

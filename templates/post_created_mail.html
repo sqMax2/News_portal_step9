@@ -7,7 +7,7 @@
 </head>
 <body>
     <h2>{{ post.author.authorUser.username }}: {{ post.title }} {{ post.dateCreation|date:"d.m.Y" }}</h2>
-    <p> Hello, {{ user.username }}. New post at your favourite category:
-        <a href="http://127.0.0.1:8000{{ redirectURL }}">{{ post.text|truncatechars:50 }} </p>
+    <p> Hello, subscriber. New post at your favourite category:</p>
+        <p><a href="http://127.0.0.1:8000{{ post.get_absolute_url }}">{{ post.text|truncatechars:50 }}</a> </p>
 </body>
 </html>

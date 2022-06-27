@@ -6,7 +6,7 @@ from .models import Author, Category, Post, Comment, PostCategory
 from .filters import PostFilter
 from .forms import PostForm, ProfileForm
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound, Http404
 # Authentication imports
 # from django.utils.decorators import method_decorator
 # from django.views.generic import TemplateView
@@ -38,12 +38,23 @@ class NewsList(ListView):
     # post list generation
     def get_queryset(self):
         queryset = super().get_queryset()
-        current_url = self.request.path
+        # current_url = self.request.path
         # different view for news and articles posts
-        if current_url.split('/')[1] == 'news':
+        postType = self.kwargs['postType']
+        if postType == 'news':
             self.filterset = PostFilter(self.request.GET, queryset.filter(categoryType=Post.NEWS))
-        else:
+        elif postType == 'articles':
             self.filterset = PostFilter(self.request.GET, queryset.filter(categoryType=Post.ARTICLE))
+        else:
+            self.filterset = PostFilter(self.request.GET, queryset.none())
+            raise Http404('Page not found')
+            # HttpResponseNotFound('Not found')
+            # return self.model.objects.none()
+
+        # if current_url.split('/')[1] == 'news':
+        #     self.filterset = PostFilter(self.request.GET, queryset.filter(categoryType=Post.NEWS))
+        # else:
+        #     self.filterset = PostFilter(self.request.GET, queryset.filter(categoryType=Post.ARTICLE))
         return self.filterset.qs
 
     # additional data
@@ -76,6 +87,11 @@ class PostDetail(DetailView):
             cache.set(f'post-{self.kwargs["pk"]}', obj)
         return obj
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['catType'] = str(self.object.categoryType)
+        return context
+
 
 class NewsCreate(PermissionRequiredMixin, CreateView):
     # custom form
@@ -87,17 +103,16 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
     permission_required = ('newsapp.add_post',)
 
     def form_valid(self, form):
-        current_url = self.request.path
+        # current_url = self.request.path
         post = form.save(commit=False)
         # different categories for news and articles posts
-
-        if current_url.split('/')[1] == 'news':
+        postType = self.kwargs['postType']
+        if postType == 'news':
             post.categoryType = self.model.NEWS
-        else:
+        elif postType == 'articles':
             post.categoryType = self.model.ARTICLE
-
         self.object = form.save()
-        redirectURL = '/' + current_url.split('/')[1] + '/' + str(self.object.id)
+        redirectURL = '/' + postType + '/' + str(self.object.id)
 
         # mailing through html rendering
         # html_content = render_to_string(
@@ -142,35 +157,39 @@ class NewsEdit(PermissionRequiredMixin, UpdateView):
     permission_required = ('newsapp.change_post',)
 
     def post(self, request, *args, **kwargs):
-        current_url = self.request.path
-        redirectURL = ''
-        for i in current_url.split('/'):
-            if i == 'edit':
-                redirectURL = redirectURL[:-1]
-                break
-            redirectURL += i+'/'
+        # current_url = self.request.path
+        redirectURL = f'/{self.kwargs["postType"]}/{self.kwargs["pk"]}'
+        self.success_url = redirectURL
+
+        # for i in current_url.split('/'):
+        #     if i == 'edit':
+        #         redirectURL = redirectURL[:-1]
+        #         break
+        #     redirectURL += i+'/'
         super().post(request, *args, **kwargs)
         return redirect(redirectURL)
 
 
-class NewsDelete(DeleteView):
+class NewsDelete(PermissionRequiredMixin, DeleteView):
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('news_list')
+    permission_required = ('newsapp.delete_post',)
 
     def post(self, request, *args, **kwargs):
-        current_url = self.request.path
-        redirectURL = ''
-        tempURL = ''
-        for i in current_url.split('/'):
-            if i == 'delete':
-                redirectURL = tempURL[:-1]
-                break
-            else:
-                tempURL = redirectURL
-            redirectURL += i + '/'
-        super().post(request, *args, **kwargs)
-        return redirect(redirectURL)
+        # current_url = self.request.path
+        redirectURL = f'/{self.kwargs["postType"]}/'
+        self.success_url = redirectURL
+        # tempURL = ''
+        # for i in current_url.split('/'):
+        #     if i == 'delete':
+        #         redirectURL = tempURL[:-1]
+        #         break
+        #     else:
+        #         tempURL = redirectURL
+        #     redirectURL += i + '/'
+        return super().post(request, *args, **kwargs)
+        # return redirect(redirectURL)
 
 # Authentication class examples
 # class ProtectedView(TemplateView):

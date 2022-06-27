@@ -24,8 +24,7 @@ urlpatterns = [
     # path('', include('django.contrib.flatpages.urls')),
     path('', include('protect.urls')),
     path('sign/', include('authapp.urls')),
-    path('news/', include('newsapp.urls')),
-    path('articles/', include('newsapp.urls')),
+    path('<slug:postType>/', include('newsapp.urls', namespace='newsapp')),
     path('accounts/', include('allauth.urls')),
     path('celery/', CeleryView.as_view(), name='celery'),
 ]
