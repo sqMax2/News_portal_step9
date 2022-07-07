@@ -1,3 +1,5 @@
+import datetime
+
 from django import template
 import re
 
@@ -13,3 +15,7 @@ def censor(value):
         value = re.sub(repl, '\\1**\\2', value, flags=re.IGNORECASE)
 
     return f'{value}'
+
+@register.simple_tag(takes_context = True, name = "tagname")
+def func(context, other_arg):
+    pass

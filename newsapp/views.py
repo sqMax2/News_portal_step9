@@ -22,6 +22,10 @@ from django.shortcuts import redirect
 from .tasks import hello, printer
 # caching
 from django.core.cache import cache
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class NewsList(ListView):

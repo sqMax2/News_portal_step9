@@ -43,7 +43,6 @@ News
 <a href="search">Search</a> <a href="create">Create</a>
 
    <hr>
-{% if news_list %}
     <table>
         <tr>
             {% for news in news_list %}
@@ -54,12 +53,11 @@ News
                     {{ news.text|truncatechars:20|censor }}
                 </a>
             </td>
+            {% empty %}
+            <h2>No news available</h2>
             {% endfor %}
         </tr>
     </table>
-{% else %}
-    <h2>No news available</h2>
-{% endif %}
 
 
    <!-- adding pagination -->
