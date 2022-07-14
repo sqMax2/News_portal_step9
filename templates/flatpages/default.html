@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 
 {% load static %}
+{% load i18n %}
+{% load tz %}
 
 <html lang="en">
 
@@ -15,14 +17,17 @@
 <!--        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />-->
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{% static '/css/styles.css' %}" rel="stylesheet" />
+        <style>
+        body {background-color: {% if current_time.hour >= 19 or current_time.hour <= 7 %} darkcyan {% else %} powderblue {% endif %};}
+        </style>
     </head>
     <body>
     {% load cache %}
-    {% cache 300 navbar %}
+    {% cache 30 navbar %}
         <!-- Responsive navbar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" href="/">My 1st site</a>
+                <a class="navbar-brand" href="/">{% trans "My 1st site" %}</a>
                    <button class="navbar-toggler" type="button" data-toggle="collapse"
                            data-target="#navbarResponsive"
                            aria-controls="navbarResponsive" aria-expanded="false"
@@ -32,10 +37,10 @@
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" aria-current="page" href="/news/">News</a>
+                            <a class="nav-link" aria-current="page" href="/news/">{% trans "News" %}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/articles/">Articles</a>
+                            <a class="nav-link" href="/articles/">{% trans "Articles" %}</a>
                         </li>
 <!--                        <li class="nav-item">-->
 <!--                            <a class="nav-link" href="/alternative/">Другое</a>-->
@@ -45,8 +50,44 @@
             </div>
         </nav>
     {% endcache %}
+
+
+
         <!-- Page content-->
         <div class="container">
+                <!-- Language selection -->
+                 <form action="{% url 'set_language' %}" method="POST"> {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ redirect_to }}">
+
+                    <select name="language" id="">
+                        {% get_current_language as LANGUAGE_CODE %}
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_language_info_list for LANGUAGES as languages %}
+
+                        {% for language in languages %}
+                            <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %}>
+                                {{ language.name_local }} - {{ language.code }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" value="{% trans 'set' %}">
+                </form>
+                <!-- timezone selection -->
+                {% get_current_timezone as TIME_ZONE %}
+                <form action="" method="POST">
+{# {% url 'set_timezone' %} #}
+                    {% csrf_token %}
+                    <label for="timezone">{% trans "Time zone" %}:</label>
+                    <select name="timezone">
+                        {% for tz in timezones %}
+                        <option value="{{ tz }}"{% if tz == TIME_ZONE %} selected{% endif %}>{{ tz }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" value="{% trans 'set' %}">
+                </form>
+
+                {{ TIME_ZONE }}
+                {{ current_time|timezone:TIME_ZONE }}
             {% block content %}
             {{ flatpage.content }}
             {% endblock content %}

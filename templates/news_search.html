@@ -4,6 +4,7 @@
 {% load custom_filters %}
 <!-- adding custom tags usage -->
 {% load custom_tags %}
+{% load i18n %}
 
 <!-- page title -->
 {% block title %}
@@ -12,9 +13,9 @@ News
 
 <!-- News list -->
 {% block content %}
-<h1>Search Results ({{ page_obj.paginator.count }})</h1>
+<h1>{% trans "Search Results" %} ({{ page_obj.paginator.count }})</h1>
 <!--<h5>Today {{ time_now|date:'d.m.Y' }}</h5>-->
-<h5>Today {% current_time '%d.%m.%Y' %}</h5>
+<h5>{% trans "Today" %} {% current_time '%d.%m.%Y' %}</h5>
 <!--{% if news_list %}-->
 <!--    <table>-->
 <!--        <tr>-->
@@ -38,9 +39,9 @@ News
        <!-- generating form -->
        {{ filterset.form.as_p }}
        <!-- form submit button -->
-       <input type="submit" value="Search" />
+       <input type="submit" value="{% trans 'Search' %}" />
    </form>
-<a href="..">Back to All</a>
+<a href="..">{% trans "Back to All" %}</a>
    <hr>
     <table>
         <tr>

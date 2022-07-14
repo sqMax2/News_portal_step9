@@ -12,7 +12,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 # from django.views.generic import TemplateView
 # from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 # mailing
 # from django.core.mail import send_mail
 # from django.core.mail import EmailMultiAlternatives
@@ -23,9 +23,23 @@ from .tasks import hello, printer
 # caching
 from django.core.cache import cache
 import logging
+import pytz
+from django.utils import timezone
 
 
 logger = logging.getLogger(__name__)
+
+
+def set_timezone(request):
+    context = {
+        'current_time': timezone.localtime(timezone.now()),
+        'timezones': pytz.common_timezones
+    }
+    if request.method == 'POST':
+        request.session['django_timezone'] = request.POST['timezone']
+        return redirect('/')
+    else:
+        return render(request, 'default.html', context)
 
 
 class NewsList(ListView):
@@ -64,6 +78,12 @@ class NewsList(ListView):
     # additional data
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # timezone
+        curent_time = timezone.now()
+        context.update({
+            'current_time': timezone.localtime(timezone.now()),
+            'timezones': pytz.common_timezones
+        })
         # adding filtering object
         context['filterset'] = self.filterset
         return context
@@ -71,6 +91,14 @@ class NewsList(ListView):
 
 class NewsSearch(NewsList):
     template_name = 'news_search.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'current_time': timezone.localtime(timezone.now()),
+            'timezones': pytz.common_timezones
+        })
+        return context
 
 
 class PostDetail(DetailView):
@@ -94,6 +122,10 @@ class PostDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['catType'] = str(self.object.categoryType)
+        context.update({
+            'current_time': timezone.localtime(timezone.now()),
+            'timezones': pytz.common_timezones
+        })
         return context
 
 
@@ -105,6 +137,14 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
     # template
     template_name = 'post_edit.html'
     permission_required = ('newsapp.add_post',)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'current_time': timezone.localtime(timezone.now()),
+            'timezones': pytz.common_timezones
+        })
+        return context
 
     def form_valid(self, form):
         # current_url = self.request.path
@@ -173,6 +213,14 @@ class NewsEdit(PermissionRequiredMixin, UpdateView):
         super().post(request, *args, **kwargs)
         return redirect(redirectURL)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'current_time': timezone.localtime(timezone.now()),
+            'timezones': pytz.common_timezones
+        })
+        return context
+
 
 class NewsDelete(PermissionRequiredMixin, DeleteView):
     model = Post
@@ -194,6 +242,14 @@ class NewsDelete(PermissionRequiredMixin, DeleteView):
         #     redirectURL += i + '/'
         return super().post(request, *args, **kwargs)
         # return redirect(redirectURL)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'current_time': timezone.localtime(timezone.now()),
+            'timezones': pytz.common_timezones
+        })
+        return context
 
 # Authentication class examples
 # class ProtectedView(TemplateView):

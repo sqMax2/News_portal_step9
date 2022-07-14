@@ -1,18 +1,18 @@
 {% extends "main.html" %}
-
+{% load i18n %}
 {% block content %}
-<h2>Authorized User {{request.user.username}} Page</h2>
-<div> Could contain personal info </div>
+<h2>{% trans "Authorized User" %} {{request.user.username}} {% trans "Page" %}</h2>
+<div> {% trans "Could contain personal info" %} </div>
 
 <form action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Subscribe" />
+    <input type="submit" value="{% trans 'Subscribe' %}" />
 </form>
 
-<button> <a href="sign/logout/">Exit</a> </button>
+<button> <a href="sign/logout/">{% trans "Exit" %}</a> </button>
 <br/>
 {% if is_not_author %}
-<button> <a href="sign/upgrade/"> Wanna become an Author </a> </button>
+<button> <a href="sign/upgrade/"> {% trans "Wanna become an Author" %} </a> </button>
 {% endif %}
 {% endblock %}

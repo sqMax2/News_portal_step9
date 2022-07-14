@@ -5,6 +5,8 @@ from django.urls import reverse, reverse_lazy
 from string import Template
 # cache
 from django.core.cache import cache
+# internationalization
+from django.utils.translation import gettext as _
 
 
 # Author model
@@ -33,9 +35,10 @@ class Author(models.Model):
 
 # Category and tags
 class Category(models.Model):
-    name = models.CharField(max_length=64, unique=True)
+    name = models.CharField(max_length=64, unique=True, help_text=_('category name'))
     # related_name creates field in User model
-    subscribers = models.ManyToManyField(User, through='CategorySubscribers', related_name='categories', related_query_name='category')
+    subscribers = models.ManyToManyField(User, through='CategorySubscribers', related_name='categories',
+                                         related_query_name='category', verbose_name='Subscriber')
 
     @property
     def subscribers_count(self):
@@ -50,8 +53,8 @@ class Category(models.Model):
 
 
 class CategorySubscribers(models.Model):
-    userThrough = models.ForeignKey(User, on_delete=models.CASCADE)
-    categoryThrough = models.ForeignKey(Category, on_delete=models.CASCADE)
+    userThrough = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Subscribers')
+    categoryThrough = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Categories')
 
 
 # Post and article
@@ -67,8 +70,9 @@ class Post(models.Model):
     )
     categoryType = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=ARTICLE, verbose_name='Post type')
     dateCreation = models.DateTimeField(auto_now_add=True, verbose_name='Creation date')
-    postCategory = models.ManyToManyField(Category, through='PostCategory', related_name='posts')
-    title = models.CharField(max_length=128)
+    postCategory = models.ManyToManyField(Category, through='PostCategory', related_name='posts',
+                                          verbose_name='Category')
+    title = models.CharField(max_length=128, verbose_name=_('Title'))
     text = models.TextField()
     rating = models.SmallIntegerField(default=0)
     # Preview string template
@@ -116,7 +120,7 @@ class Post(models.Model):
 # ManyToMany model
 class PostCategory(models.Model):
     postThrough = models.ForeignKey(Post, on_delete=models.CASCADE)
-    categoryThrough = models.ForeignKey(Category, on_delete=models.CASCADE)
+    categoryThrough = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Categories')
 
 
 # Comments

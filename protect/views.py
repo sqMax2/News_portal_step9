@@ -5,6 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from .forms import SubscribeForm
 from newsapp.models import Category
+import pytz
+from django.utils import timezone
+
 
 class IndexView(LoginRequiredMixin, FormView):
     template_name = 'protect/index.html'
@@ -24,6 +27,11 @@ class IndexView(LoginRequiredMixin, FormView):
         redirectURL = '/'
         form = super().get_form(form_class=self.form_class)
         form.is_valid()
+        # TODO fix broken subscription
+        # if form.cleaned_data:
+        #     choosenOnes = list([co[0] for co in form.cleaned_data['category']])
+        # else:
+        #     choosenOnes = []
         choosenOnes = list([co[0] for co in form.cleaned_data['category']])
         for c in Category.objects.all():
             if str(c.id) in choosenOnes:
@@ -35,6 +43,10 @@ class IndexView(LoginRequiredMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
+        context.update({
+            'current_time': timezone.localtime(timezone.now()),
+            'timezones': pytz.common_timezones
+        })
         return context
 
 

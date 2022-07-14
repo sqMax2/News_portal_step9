@@ -1,22 +1,31 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 from django.contrib.auth.models import User
+from modeltranslation.admin import TranslationAdmin
 
-from .models import Author, Category, Post, Comment, CategorySubscribers
+from .models import Author, Category, Post, Comment, CategorySubscribers, PostCategory
 
 
 def assignSportCategory(modeladmin, request, queryset):
     for i in queryset:
         Category.objects.get(name='Sport').posts.add(i)
 
+
 assignSportCategory.short_description = 'Assign Sport category'
 
 
-
 class CategoryInline(admin.TabularInline):
-    model = Category.subscribers.through  #Category.subscribers.through
+    model = CategorySubscribers  #Category.subscribers.through
     # filter_horizontal = ('subscribers',)
     extra = 0
+    verbose_name = 'Subscriber'
+
+
+class PostInline(admin.TabularInline):
+    model = PostCategory
+    extra = 0
+    verbose_name = 'Category'
+    verbose_name_plural = 'Categories'
 
 
 class CategoryAdmin(ModelAdmin):
@@ -25,12 +34,7 @@ class CategoryAdmin(ModelAdmin):
     inlines = [CategoryInline]
 
 
-class PostInline(admin.TabularInline):
-    model = Post.postCategory.through
-    extra = 0
-
-
-class PostAdmin(ModelAdmin):
+class PostAdmin(TranslationAdmin):
     # list_display = ['title', ]
     inlines = [PostInline]
     # filter_horizontal = ['postCategory', ]

@@ -1,0 +1,5 @@
+# gettext
+venv\scripts\django-admin compilemessages -l ru
+python manage.py makemessages -l ru
+python manage.py compilemessages
+python manage.py update_translation_fields

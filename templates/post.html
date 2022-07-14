@@ -2,7 +2,7 @@
 
 <!-- adding custom filters usage -->
 {% load custom_filters %}
-
+{% load i18n %}
 <!-- page title -->
 {% block title %}
 {{ post.title }}
@@ -14,7 +14,7 @@
 <span style="font-size:0.8rem">{{ post.dateCreation|date:'d.m.Y' }}</span><br/>
 {{ post.text|censor }}
 <br/>
-<a href="{{ post.pk }}/edit/">Edit</a> <a href="{{ post.pk }}/delete/">Delete</a>
+<a href="{{ post.pk }}/edit/">{% trans "Edit" %}</a> <a href="{{ post.pk }}/delete/">{% trans "Delete" %}</a>
 <br/><br/>
-<a href="./">Back</a>
+<a href="./">{% trans "Back" %}</a>
 {% endblock content %}

@@ -15,6 +15,8 @@ from pathlib import Path
 
 import django.utils.log
 from dotenv import load_dotenv
+from django.utils.translation import gettext_lazy as _
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -36,6 +38,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -68,6 +71,8 @@ SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # adds localization
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -79,6 +84,7 @@ MIDDLEWARE = [
     # 'django.middleware.cache.UpdateCacheMiddleware',
     # 'django.middleware.common.CommonMiddleware',
     # 'django.middleware.cache.FetchFromCacheMiddleware',
+    'newsapp.middlewares.TimezoneMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -337,3 +343,16 @@ LOGGING = {
 ADMINS = [
     ('Admin', os.getenv('ADMIN_MAIL'))
 ]
+
+# Internationalization
+USE_I18N = True
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, 'locale')
+]
+LANGUAGE_CODE = 'ru'
+LANGUAGES = [
+    ('en-us', _('English')),
+    ('ru', _('Russian')),
+]
+LANGUAGE_SESSION_KEY = 'session_language_appname'
+LANGUAGE_COOKIE_NAME = 'cookie_language_appname'

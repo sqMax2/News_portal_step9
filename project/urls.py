@@ -16,24 +16,26 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from newsapp.views import CeleryView
+from newsapp.views import CeleryView, set_timezone
 
 import logging
 
 
-logger_dr = logging.getLogger('django.request')
-logger_cn = logging.getLogger('django')
-
-logger_dr.error("Hello! I'm error in your app. Enjoy:)")
-logger_cn.error("Hello! I'm error in your app. Enjoy:)")
+# logger_dr = logging.getLogger('django.request')
+# logger_cn = logging.getLogger('django')
+#
+# logger_dr.error("Hello! I'm error in your app. Enjoy:)")
+# logger_cn.error("Hello! I'm error in your app. Enjoy:)")
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('i18n/', include('django.conf.urls.i18n')),
     # path('', include('django.contrib.flatpages.urls')),
     path('', include('protect.urls')),
     path('sign/', include('authapp.urls')),
     path('<slug:postType>/', include('newsapp.urls', namespace='newsapp')),
     path('accounts/', include('allauth.urls')),
     path('celery/', CeleryView.as_view(), name='celery'),
+    # path('', set_timezone, name='set_timezone'),
 ]

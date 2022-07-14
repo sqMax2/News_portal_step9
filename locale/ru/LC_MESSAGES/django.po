@@ -1,0 +1,167 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-14 18:57+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%"
+"100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: .\fpages\admin.py:11
+msgid "Advanced options"
+msgstr "Дополнительные параметры"
+
+#: .\newsapp\filters.py:12 .\newsapp\forms.py:37
+msgid "Category"
+msgstr "Категория"
+
+#: .\newsapp\filters.py:23
+msgid "Creation date since"
+msgstr "Дата создания от"
+
+#: .\newsapp\filters.py:37
+msgid "Title contains:"
+msgstr "Заголовок содержит:"
+
+#: .\newsapp\forms.py:11 .\newsapp\models.py:75
+msgid "Title"
+msgstr "Заголовок"
+
+#: .\newsapp\forms.py:35
+msgid "Text"
+msgstr "Текст"
+
+#: .\newsapp\forms.py:36
+msgid "Author"
+msgstr "Автор"
+
+#: .\newsapp\models.py:38
+msgid "category name"
+msgstr "Название категории"
+
+#: .\project\settings.py:354
+msgid "English"
+msgstr ""
+
+#: .\project\settings.py:355
+msgid "Russian"
+msgstr ""
+
+#: .\protect\forms.py:15
+msgid "Categories"
+msgstr "Категории"
+
+#: .\templates\flatpages\default.html:27
+msgid "My 1st site"
+msgstr "Мой 1-й сайт"
+
+#: .\templates\flatpages\default.html:37
+msgid "News"
+msgstr "Новости"
+
+#: .\templates\flatpages\default.html:40
+msgid "Articles"
+msgstr "Статьи"
+
+#: .\templates\flatpages\default.html:70 .\templates\flatpages\default.html:83
+msgid "set"
+msgstr "выбрать"
+
+#: .\templates\flatpages\default.html:77
+msgid "Time zone"
+msgstr "Часовой пояс"
+
+#: .\templates\news_list.html:15
+msgid "All"
+msgstr "Все"
+
+#: .\templates\news_list.html:17 .\templates\news_search.html:18
+msgid "Today"
+msgstr "Сегодня"
+
+#: .\templates\news_list.html:43 .\templates\news_search.html:42
+msgid "Search"
+msgstr "Найти"
+
+#: .\templates\news_list.html:43
+msgid "Create"
+msgstr "Создать"
+
+#: .\templates\news_list.html:57
+msgid "No news available"
+msgstr "Нет доступных новостей"
+
+#: .\templates\news_search.html:16
+msgid "Search Results"
+msgstr "Результаты поиска"
+
+#: .\templates\news_search.html:44
+msgid "Back to All"
+msgstr "Назад ко всем статьям"
+
+#: .\templates\post.html:17
+msgid "Edit"
+msgstr "Редактировать"
+
+#: .\templates\post.html:17 .\templates\post_delete.html:9
+msgid "Delete"
+msgstr "Удалить"
+
+#: .\templates\post.html:19
+msgid "Back"
+msgstr "Назад"
+
+#: .\templates\post_delete.html:4
+msgid "Delete post"
+msgstr "Удалить пост"
+
+#: .\templates\post_delete.html:8
+msgid "Deleting"
+msgstr "Удаляем"
+
+#: .\templates\post_edit.html:4
+msgid "Post"
+msgstr "Пост"
+
+#: .\templates\post_edit.html:9
+msgid "Save"
+msgstr "Сохранить"
+
+#: .\templates\protect\index.html:4
+msgid "Authorized User"
+msgstr "Страница авторизованного пользователя"
+
+#: .\templates\protect\index.html:4
+msgid "Page"
+msgstr " "
+
+#: .\templates\protect\index.html:5
+msgid "Could contain personal info"
+msgstr "Может содержать персональные данные"
+
+#: .\templates\protect\index.html:10
+msgid "Subscribe"
+msgstr "Подписаться"
+
+#: .\templates\protect\index.html:13
+msgid "Exit"
+msgstr "Выйти"
+
+#: .\templates\protect\index.html:16
+msgid "Wanna become an Author"
+msgstr "Хочу стать автором"
+
+#~ msgid "Authorized User {{request.user.username}} Page"
+#~ msgstr "Страница авторизованного пользователя {{request.user.username}}"

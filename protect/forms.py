@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.forms import formset_factory
 from newsapp.models import Category
+from django.utils.translation import gettext_lazy as _
 
 
 class SubscribeForm(forms.ModelForm):
@@ -11,6 +12,7 @@ class SubscribeForm(forms.ModelForm):
     category = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
         choices=(categoryChoises),
+        label=_('Categories')
 
         # initial=categorySubscription,
 
