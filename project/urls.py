@@ -34,8 +34,9 @@ urlpatterns = [
     # path('', include('django.contrib.flatpages.urls')),
     path('', include('protect.urls')),
     path('sign/', include('authapp.urls')),
+    path('tz/', set_timezone, name='set_timezone'),
     path('<slug:postType>/', include('newsapp.urls', namespace='newsapp')),
     path('accounts/', include('allauth.urls')),
     path('celery/', CeleryView.as_view(), name='celery'),
-    # path('', set_timezone, name='set_timezone'),
+
 ]

@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     # additional apps
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'newsapp.apps.NewsappConfig',
+    #'newsapp.apps.NewsappConfig',
     'fpages',
     'django_filters',
     # allauth required apps
@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'protect',
     # scheduler
     'django_apscheduler',
+    'newsapp',
 
 ]
 

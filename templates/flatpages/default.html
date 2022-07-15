@@ -18,7 +18,7 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{% static '/css/styles.css' %}" rel="stylesheet" />
         <style>
-        body {background-color: {% if current_time.hour >= 19 or current_time.hour <= 7 %} darkcyan {% else %} powderblue {% endif %};}
+        body {background-color: {% if current_time.hour >= 19 or current_time.hour <= 7 %} #797471 {% else %} whitesmoke {% endif %};}
         </style>
     </head>
     <body>
@@ -74,8 +74,7 @@
                 </form>
                 <!-- timezone selection -->
                 {% get_current_timezone as TIME_ZONE %}
-                <form action="" method="POST">
-{# {% url 'set_timezone' %} #}
+                <form action="{% url 'set_timezone' %}" method="POST">
                     {% csrf_token %}
                     <label for="timezone">{% trans "Time zone" %}:</label>
                     <select name="timezone">
